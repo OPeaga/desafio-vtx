@@ -1,0 +1,31 @@
+# Dependencies
+node_modules/
+
+# Env
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# Build output
+dist/
+build/
+.vite/
+
+# Logs
+*.log
+
+# Editor / OS
+.vscode/
+.idea/
+settings.*
+
+
+# Coverage / cache
+.eslintcache
+
+# Docker volumes
+postgres-data/
+
+# Project planning (local only)
+TODO.md
