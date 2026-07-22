@@ -126,7 +126,13 @@ Exemplos reais de prompts utilizados durante o desenvolvimento:
 
 ### Reflexão crítica
 
-`<descrever um momento em que a IA gerou código errado/incompleto/alucinado, como foi identificado e como foi corrigido>`
+Durante a criação do `config/env.ts`, o Claude Code adicionou validação das variáveis de ambiente com Zod — algo que não estava no levantamento de requisitos do edital, que restringe o uso do Zod à validação do `body` das requisições da API. Foi um caso de over-engineering: a IA generalizou um padrão (validação com Zod) para um contexto onde ele não havia sido pedido.
+
+O erro foi identificado na revisão do escopo e corrigido com o seguinte prompt:
+
+> Não era necessário validar as envs com zod, remova essa validação, vamos nos restringir somente às requisições como mostra no levantamento de requisitos.
+
+A IA reverteu o arquivo para uma checagem simples (`if (!process.env.X) throw new Error(...)`), mantendo o Zod apenas nos schemas de validação de requisição (`auth.schema.ts`, `listings.schema.ts`), como definido no escopo do projeto.
 
 ---
 

@@ -12,6 +12,10 @@ dist/
 build/
 .vite/
 
+# Prisma generated client
+backend/src/generated/
+backend/prisma/migrations
+
 # Logs
 *.log
 
