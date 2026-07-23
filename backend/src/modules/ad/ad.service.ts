@@ -64,6 +64,14 @@ export async function listAds(filters: AdFilters) {
   };
 }
 
+export async function listAdsByUser(userId: string) {
+  return prisma.ad.findMany({
+    where: { userId },
+    include: { category: true },
+    orderBy: { createdAt: "desc" },
+  });
+}
+
 export async function getAdById(id: string) {
   const ad = await prisma.ad.findUnique({
     where: { id },

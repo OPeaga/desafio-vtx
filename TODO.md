@@ -24,10 +24,10 @@ Prazo: tudo finalizado até **25/07**, testado e deployado até **27/07**.
 - [x] Filtros de `GET /api/ads`: category, type, search, min_price, max_price, page, limit
 - [x] Validação de dono no delete (comparar `user_id` do JWT com o do anúncio)
 - [x] `middlewares/auth.middleware.ts` (proteção das rotas privadas)
-- [ ] `GET /api/ads/me` dentro do próprio módulo `ad`
-- [ ] Módulo `categories`: `categories.controller.ts` e `categories.routes.ts` (só GET básico, listar todas)
-- [ ] Módulo `stats`: `stats.controller.ts` e `stats.routes.ts`
-- [ ] Testar todas as rotas manualmente contra o contrato fechado (auth + ad já testados via curl)
+- [x] `GET /api/ads/me` dentro do próprio módulo `ad`
+- [x] Módulo `categories`: `categories.controller.ts` e `categories.routes.ts` (só GET básico, listar todas)
+- [x] Módulo `stats`: `stats.controller.ts` e `stats.routes.ts`
+- [x] Testar todas as rotas manualmente contra o contrato fechado (auth + ad já testados via curl)
 
 ## 24/07 — Frontend: scaffold + páginas core
 
@@ -73,3 +73,4 @@ Prazo: tudo finalizado até **25/07**, testado e deployado até **27/07**.
 ## Backlog / Bônus (fora do prazo principal, implementar se sobrar tempo)
 
 - [ ] Slug no model `Ad` para URLs amigáveis no frontend (`/anuncios/livro-de-calculo-3f9a2b` em vez do UUID cru). Plano detalhado salvo em `C:\Users\Lorde\.claude\plans\delegated-booping-scott.md`: campo `slug` único gerado no `ad.service.ts` (`slugify(title) + "-" + crypto.randomUUID().slice(0,6)`), `GET /api/ads/:id` passa a aceitar id OU slug no mesmo parâmetro.
+- [ ] Padrão Repository para acesso a dados: introduzir uma camada `repositories/` (ex.: `ad.repository.ts`, `user.repository.ts`, `category.repository.ts`) entre os `services` e o Prisma, isolando queries do Prisma Client em métodos de repositório (`findById`, `findMany`, `create`, `delete` etc.). Services passam a depender dos repositories em vez de chamar `prisma.*` diretamente. Objetivo: desacoplar regra de negócio de acesso a dados e facilitar troca de ORM/mock em testes.

@@ -2,6 +2,8 @@ import cors from "cors";
 import express from "express";
 import { authRoutes } from "./modules/auth/auth.routes";
 import { adRoutes } from "./modules/ad/ad.routes";
+import { categoriesRoutes } from "./modules/categories/categories.routes";
+import { statsRoutes } from "./modules/stats/stats.routes";
 import { errorMiddleware } from "./middlewares/error.middleware";
 
 export const app = express();
@@ -15,5 +17,7 @@ app.get("/", (_req, res) => {
 
 app.use("/api/auth", authRoutes);
 app.use("/api/ads", adRoutes);
+app.use("/api/categories", categoriesRoutes);
+app.use("/api/stats", statsRoutes);
 
 app.use(errorMiddleware);

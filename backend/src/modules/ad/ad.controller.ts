@@ -1,6 +1,6 @@
 import { NextFunction, Response } from "express";
 import { AuthRequest } from "../../middlewares/auth.middleware";
-import { createAd, deleteAd, getAdById, listAds } from "./ad.service";
+import { createAd, deleteAd, getAdById, listAds, listAdsByUser } from "./ad.service";
 import { adFiltersSchema } from "./ad.schema";
 
 export async function create(req: AuthRequest, res: Response, next: NextFunction) {
@@ -17,6 +17,15 @@ export async function index(req: AuthRequest, res: Response, next: NextFunction)
     const filters = adFiltersSchema.parse(req.query);
     const result = await listAds(filters);
     return res.status(200).json(result);
+  } catch (error) {
+    return next(error);
+  }
+}
+
+export async function mine(req: AuthRequest, res: Response, next: NextFunction) {
+  try {
+    const ads = await listAdsByUser(req.userId!);
+    return res.status(200).json(ads);
   } catch (error) {
     return next(error);
   }
