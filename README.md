@@ -111,7 +111,8 @@ Frontend disponível em `http://localhost:5173`.
 ## Diário de Bordo da IA
 
 ### Ferramentas utilizadas
-`<preencher: ex. Claude, GitHub Copilot, etc.>`
+1. `Claude Code e Claude Web`
+2. `Antigravity IDE - Gemini`
 
 ### Estratégia de Engenharia de Prompts
 
@@ -119,7 +120,7 @@ Exemplos reais de prompts utilizados durante o desenvolvimento:
 
 1. `como que ele valida que está correto? explique com exemplo`
 2. `Leia o arquivo PDF, vamos listar os pontos chaves e pontuar o que será feito. Tudo, inclusive os desafios bonus devem ser realizados. `
-3. `<colar prompt real 3>`
+3. `provavelmente iremos implementar o slug no banco mas somente para os ads. Veja as alterações e implicações disso`
 
 ### Compartilhamento de histórico (opcional)
 `<link de conversa longa de desenvolvimento, se aplicável>`
