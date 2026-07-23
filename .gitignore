@@ -30,6 +30,3 @@ settings.*
 
 # Docker volumes
 postgres-data/
-
-# Project planning (local only)
-TODO.md

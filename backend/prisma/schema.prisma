@@ -9,26 +9,26 @@ datasource db {
 }
 
 model User {
-  id           String    @id @default(uuid())
+  id           String   @id @default(uuid())
   name         String
-  email        String    @unique
-  passwordHash String    @map("password_hash")
-  createdAt    DateTime  @default(now()) @map("created_at")
-  listings     Listing[]
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  createdAt    DateTime @default(now()) @map("created_at")
+  ads          Ad[]
 
   @@map("users")
 }
 
 model Category {
-  id       Int       @id @default(autoincrement())
-  name     String    @unique
-  slug     String    @unique
-  listings Listing[]
+  id   Int    @id @default(autoincrement())
+  name String @unique
+  slug String @unique
+  ads  Ad[]
 
   @@map("categories")
 }
 
-model Listing {
+model Ad {
   id          String   @id @default(uuid())
   userId      String   @map("user_id")
   categoryId  Int      @map("category_id")
@@ -42,5 +42,5 @@ model Listing {
   user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   category Category @relation(fields: [categoryId], references: [id])
 
-  @@map("listings")
+  @@map("ads")
 }

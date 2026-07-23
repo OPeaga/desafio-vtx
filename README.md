@@ -37,7 +37,7 @@ vortex-marketplace/
 └── frontend/    → PWA (React + Vite)
 ```
 
-Backend organizado por módulos (`auth`, `listings`, `users`, `categories`, `stats`), cada um separando `routes` (endpoints), `controller` (request/response) e `service` (regra de negócio + acesso ao banco).
+Backend organizado por módulos (`auth`, `ad`, `categories`, `stats`), cada um separando `routes` (endpoints), `controller` (request/response) e `service` (regra de negócio + acesso ao banco). "Meus anúncios" vive dentro do próprio módulo `ad` (`GET /api/ads/me`).
 
 ---
 
@@ -91,11 +91,11 @@ Frontend disponível em `http://localhost:5173`.
 |---|---|---|---|
 | POST | `/api/auth/register` | Cria conta | Não |
 | POST | `/api/auth/login` | Login, retorna JWT | Não |
-| GET | `/api/listings` | Lista pública (filtros: category, type, search, min_price, max_price) | Não |
-| GET | `/api/listings/:id` | Detalhe do anúncio | Não |
-| POST | `/api/listings` | Cria anúncio | Sim |
-| DELETE | `/api/listings/:id` | Remove anúncio (só dono) | Sim |
-| GET | `/api/users/me/listings` | Anúncios do usuário logado | Sim |
+| GET | `/api/ads` | Lista pública (filtros: category, type, search, min_price, max_price) | Não |
+| GET | `/api/ads/:id` | Detalhe do anúncio | Não |
+| POST | `/api/ads` | Cria anúncio | Sim |
+| DELETE | `/api/ads/:id` | Remove anúncio (só dono) | Sim |
+| GET | `/api/ads/me` | Anúncios do usuário logado | Sim |
 | GET | `/api/categories` | Lista categorias | Não |
 | GET | `/api/stats` | Estatísticas da landing page | Não |
 
@@ -117,8 +117,8 @@ Frontend disponível em `http://localhost:5173`.
 
 Exemplos reais de prompts utilizados durante o desenvolvimento:
 
-1. `<colar prompt real 1>`
-2. `<colar prompt real 2>`
+1. `como que ele valida que está correto? explique com exemplo`
+2. `Leia o arquivo PDF, vamos listar os pontos chaves e pontuar o que será feito. Tudo, inclusive os desafios bonus devem ser realizados. `
 3. `<colar prompt real 3>`
 
 ### Compartilhamento de histórico (opcional)

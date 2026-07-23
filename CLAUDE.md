@@ -35,8 +35,7 @@ vortex-marketplace/
 │       │   └── validate.middleware.ts   (genérico, recebe um Zod schema)
 │       ├── modules/
 │       │   ├── auth/          (auth.controller.ts, auth.service.ts, auth.routes.ts, auth.schema.ts)
-│       │   ├── listings/      (listings.controller.ts, listings.service.ts, listings.routes.ts, listings.schema.ts)
-│       │   ├── users/         (users.controller.ts, users.service.ts, users.routes.ts)
+│       │   ├── ad/            (ad.controller.ts, ad.service.ts, ad.routes.ts, ad.schema.ts — inclui "meus anúncios")
 │       │   ├── categories/    (categories.controller.ts, categories.routes.ts)
 │       │   └── stats/         (stats.controller.ts, stats.routes.ts)
 │       └── lib/prisma.ts
@@ -44,8 +43,8 @@ vortex-marketplace/
     ├── public/manifest.json
     └── src/
         ├── components/{ui,layout}/
-        ├── pages/{Landing,Listings,MyListings,NewListing,Login,Register}/
-        ├── hooks/{useAuth.ts,useListings.ts}
+        ├── pages/{Landing,Ads,MyAds,NewAd,Login,Register}/
+        ├── hooks/{useAuth.ts,useAds.ts}
         ├── services/api.ts
         └── types/index.ts
 ```
@@ -57,7 +56,7 @@ Regra de camadas no backend: **routes** define path + middleware → **validate 
 Toda rota que recebe `body` (POST, e futuramente PUT/PATCH se algum dia entrar em escopo) passa por um schema Zod antes de chegar no controller.
 
 - Schemas ficam em `<modulo>.schema.ts` dentro de cada módulo.
-- Middleware genérico reutilizável em `middlewares/validate.middleware.ts`, recebe o schema como parâmetro: `validate(createListingSchema)`.
+- Middleware genérico reutilizável em `middlewares/validate.middleware.ts`, recebe o schema como parâmetro: `validate(createAdSchema)`.
 - A regra condicional de negócio do anúncio (`type = 'doacao' → price null` / `type = 'venda' → price obrigatório e > 0`) é implementada com `.refine()` no schema do Zod — não deve ser duplicada como validação manual no service.
 - Erro de validação retorna sempre `400` no formato `{ "error": "mensagem" }`, consistente com o padrão de erro do restante da API.
 - Tipos TypeScript dos payloads devem ser inferidos do schema via `z.infer<typeof schema>`, não escritos à mão em paralelo.
@@ -68,9 +67,9 @@ Toda rota que recebe `body` (POST, e futuramente PUT/PATCH se algum dia entrar e
 
 **categories**: id (serial, PK), name (unique), slug (unique) — seed fixo: livros, engenharia, computacao, quimica, moveis, outros
 
-**listings**: id (UUID, PK), user_id (FK → users, ON DELETE CASCADE), category_id (FK → categories), title, description, type (`'venda'` | `'doacao'`), price (nullable, NUMERIC 10,2), image_url (nullable), created_at
+**ads**: id (UUID, PK), user_id (FK → users, ON DELETE CASCADE), category_id (FK → categories), title, description, type (`'venda'` | `'doacao'`), price (nullable, NUMERIC 10,2), image_url (nullable), created_at
 
-Relação: `users 1—N listings N—1 categories`
+Relação: `users 1—N ads N—1 categories`
 
 **Regra de negócio obrigatória (validar no service, não como CHECK no banco):**
 ```
@@ -86,15 +85,15 @@ Não criar tabelas fora deste escopo (sem imagens, sem mensagens, sem favoritos)
 |---|---|---|
 | POST | `/api/auth/register` | Não |
 | POST | `/api/auth/login` | Não |
-| GET | `/api/listings` | Não |
-| GET | `/api/listings/:id` | Não |
-| POST | `/api/listings` | Sim |
-| DELETE | `/api/listings/:id` | Sim (só dono) |
-| GET | `/api/users/me/listings` | Sim |
+| GET | `/api/ads` | Não |
+| GET | `/api/ads/:id` | Não |
+| POST | `/api/ads` | Sim |
+| DELETE | `/api/ads/:id` | Sim (só dono) |
+| GET | `/api/ads/me` | Sim |
 | GET | `/api/categories` | Não |
 | GET | `/api/stats` | Não |
 
-Filtros de `GET /api/listings`: `category`, `type`, `search`, `min_price`, `max_price`, `page`, `limit`.
+Filtros de `GET /api/ads`: `category`, `type`, `search`, `min_price`, `max_price`, `page`, `limit`.
 
 Sem PUT/PATCH — edição de anúncio está fora do escopo do edital.
 
