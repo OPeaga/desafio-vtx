@@ -69,3 +69,7 @@ Prazo: tudo finalizado até **25/07**, testado e deployado até **27/07**.
 - [ ] Smoke test em produção (todas as rotas + PWA)
 - [ ] Atualizar README com links de produção
 - [ ] Preencher "Diário de Bordo da IA" no README (feito pelo usuário)
+
+## Backlog / Bônus (fora do prazo principal, implementar se sobrar tempo)
+
+- [ ] Slug no model `Ad` para URLs amigáveis no frontend (`/anuncios/livro-de-calculo-3f9a2b` em vez do UUID cru). Plano detalhado salvo em `C:\Users\Lorde\.claude\plans\delegated-booping-scott.md`: campo `slug` único gerado no `ad.service.ts` (`slugify(title) + "-" + crypto.randomUUID().slice(0,6)`), `GET /api/ads/:id` passa a aceitar id OU slug no mesmo parâmetro.
