@@ -133,4 +133,4 @@ Deleção é **hard delete** (remove de verdade do banco), não soft delete. Ver
 
 ## Diário de Bordo da IA
 
-O usuário deve preencher manualmente no README.md a seção "Diário de Bordo da IA" com prompts reais usados, ferramentas, e uma reflexão crítica sobre algum erro da IA. Não gerar conteúdo fictício para essa seção — é avaliado como prova de autoria.
+O usuário deve preencher manualmente o arquivo `DIARIO_DE_BORDO.txt` (raiz do projeto, fora do README.md) com prompts reais usados, ferramentas, e uma reflexão crítica sobre algum erro da IA. Não gerar conteúdo fictício para esse arquivo — é avaliado como prova de autoria. O README.md só referencia o arquivo (`Ver DIARIO_DE_BORDO.txt`), não reproduz o conteúdo. Note que `DIARIO_DE_BORDO.txt` está no `.gitignore` por decisão explícita do usuário — não remover essa entrada sem confirmação.
