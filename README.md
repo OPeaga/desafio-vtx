@@ -123,12 +123,6 @@ Deploy previsto para 27/07 (ainda não realizado). Backend, frontend e PWA estã
 
 ---
 
-## Diário de Bordo da IA
-
-Ver [`DIARIO_DE_BORDO.txt`](./DIARIO_DE_BORDO.txt) na raiz do projeto.
-
----
-
 ## Licença
 
 Projeto acadêmico — Processo Seletivo Vortex 2026.
