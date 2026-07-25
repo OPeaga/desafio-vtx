@@ -33,6 +33,7 @@ Prazo: tudo finalizado até **25/07**, testado e deployado até **27/07**.
 
 - [ ] Scaffold Vite + React + TS + `vite-plugin-pwa`
 - [ ] `public/manifest.json`
+- [ ] `vercel.json` (headers `Cache-Control: no-cache` e `Service-Worker-Allowed: /` para o `sw.js`)
 - [ ] `services/api.ts`
 - [ ] `types/index.ts`
 - [ ] `hooks/useAuth.ts`

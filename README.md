@@ -120,7 +120,7 @@ Exemplos reais de prompts utilizados durante o desenvolvimento:
 
 1. `como que ele valida que está correto? explique com exemplo`
 2. `Leia o arquivo PDF, vamos listar os pontos chaves e pontuar o que será feito. Tudo, inclusive os desafios bonus devem ser realizados. `
-3. `provavelmente iremos implementar o slug no banco mas somente para os ads. Veja as alterações e implicações disso`
+3. `Isso aí, você será repsponsável por criar as páginas e bater o martelo na estilização final. Comece revisando o que já está feito, em seguida, faremos as telas, e por último, iremos implementar essa paleta de cores: em frontend\public\site-palette.svg `
 
 ### Compartilhamento de histórico (opcional)
 `<link de conversa longa de desenvolvimento, se aplicável>`
