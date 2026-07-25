@@ -29,3 +29,6 @@ settings.*
 
 # Docker volumes
 postgres-data/
+
+# Diário de Bordo
+DIARIO_DE_BORDO.txt
