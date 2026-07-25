@@ -123,12 +123,16 @@ export function AdsPage({
     if (selectedCategory) newParams.set("category", selectedCategory);
     setSearchParams(newParams);
 
+    // Doação nunca tem preço — nunca manda min_price/max_price nesse caso,
+    // mesmo que sobre algum valor em state (ex.: filtros vindos da URL).
+    const isDoacao = selectedType === "doacao";
+
     onFilterChange?.({
       search: search.trim() || undefined,
       category: selectedCategory || undefined,
       type: (selectedType as AdType) || undefined,
-      min_price: minPrice ? Number(minPrice) : undefined,
-      max_price: maxPrice ? Number(maxPrice) : undefined,
+      min_price: !isDoacao && minPrice ? Number(minPrice) : undefined,
+      max_price: !isDoacao && maxPrice ? Number(maxPrice) : undefined,
       page: 1,
     });
   };
@@ -227,7 +231,16 @@ export function AdsPage({
               <Select
                 label="Tipo de Anúncio"
                 value={selectedType}
-                onChange={(e) => setSelectedType(e.target.value)}
+                onChange={(e) => {
+                  const nextType = e.target.value;
+                  setSelectedType(nextType);
+                  // Doação nunca tem preço (regra de negócio) — faixa de preço
+                  // não faz sentido nesse caso, então limpa ao trocar pra ela.
+                  if (nextType === "doacao") {
+                    setMinPrice("");
+                    setMaxPrice("");
+                  }
+                }}
                 options={[
                   { label: "Todos os tipos", value: "" },
                   { label: "Doação (Gratuito)", value: "doacao" },
@@ -235,30 +248,32 @@ export function AdsPage({
                 ]}
               />
 
-              {/* Price range filter */}
-              <div className="flex flex-col gap-1.5">
-                <label className="text-sm font-medium text-text">
-                  Faixa de Preço (R$)
-                </label>
-                <div className="grid grid-cols-2 gap-2">
-                  <input
-                    type="number"
-                    placeholder="Mín"
-                    min="0"
-                    value={minPrice}
-                    onChange={(e) => setMinPrice(e.target.value)}
-                    className="rounded-md border border-border bg-surface px-3 py-1.5 text-sm text-text focus:outline-none focus:ring-2 focus:ring-focus-ring"
-                  />
-                  <input
-                    type="number"
-                    placeholder="Máx"
-                    min="0"
-                    value={maxPrice}
-                    onChange={(e) => setMaxPrice(e.target.value)}
-                    className="rounded-md border border-border bg-surface px-3 py-1.5 text-sm text-text focus:outline-none focus:ring-2 focus:ring-focus-ring"
-                  />
+              {/* Price range filter — não se aplica a doações (price sempre null) */}
+              {selectedType !== "doacao" && (
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-sm font-medium text-text">
+                    Faixa de Preço (R$)
+                  </label>
+                  <div className="grid grid-cols-2 gap-2">
+                    <input
+                      type="number"
+                      placeholder="Mín"
+                      min="0"
+                      value={minPrice}
+                      onChange={(e) => setMinPrice(e.target.value)}
+                      className="rounded-md border border-border bg-surface px-3 py-1.5 text-sm text-text focus:outline-none focus:ring-2 focus:ring-focus-ring"
+                    />
+                    <input
+                      type="number"
+                      placeholder="Máx"
+                      min="0"
+                      value={maxPrice}
+                      onChange={(e) => setMaxPrice(e.target.value)}
+                      className="rounded-md border border-border bg-surface px-3 py-1.5 text-sm text-text focus:outline-none focus:ring-2 focus:ring-focus-ring"
+                    />
+                  </div>
                 </div>
-              </div>
+              )}
 
               <Button type="submit" variant="primary" fullWidth size="sm">
                 Filtrar Resultados

@@ -46,14 +46,14 @@ Prazo: tudo finalizado até **25/07**, testado e deployado até **27/07**.
 
 ## 25/07 — Frontend: Landing + PWA + polish (tudo finalizado)
 
-- [ ] Landing Page rica (desktop) consumindo `/api/stats`
-- [ ] Página `MyAds`
-- [ ] Responsividade completa desktop → mobile
-- [ ] Service Worker com cache para uso offline
-- [ ] App instalável (PWA funcional de verdade)
-- [ ] Loading states e transições suaves
-- [ ] Checklist final: todos os requisitos obrigatórios implementados
-- [ ] Checklist final: todos os requisitos bônus implementados
+- [x] Landing Page rica (desktop) consumindo `/api/stats`
+- [x] Página `MyAds`
+- [ ] Responsividade completa desktop → mobile (construída com classes responsivas; revisão final fica pro dia 26)
+- [x] Service Worker com cache para uso offline (confirmado rodando sem net)
+- [x] App instalável (PWA funcional de verdade — instalado e testado)
+- [x] Loading states e transições suaves
+- [x] Checklist final: todos os requisitos obrigatórios implementados
+- [x] Checklist final: todos os requisitos bônus implementados (falta só deploy, previsto pro 27/07)
 
 ## 26/07 — Bateria de testes
 
