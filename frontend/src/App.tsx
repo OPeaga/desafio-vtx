@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import { BrowserRouter, Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import { Footer } from './components/layout/Footer'
 import { Header } from './components/layout/Header'
+import { useAds, useCategories, useMyAds, useStats } from './hooks/useAds'
+import { useAuth } from './hooks/useAuth'
 import { AdDetailPage } from './pages/AdDetailPage'
 import { AdsPage } from './pages/AdsPage'
 import { LandingPage } from './pages/LandingPage'
@@ -9,14 +11,20 @@ import { LoginPage } from './pages/LoginPage'
 import { MyAdsPage } from './pages/MyAdsPage'
 import { NewAdPage } from './pages/NewAdPage'
 import { RegisterPage } from './pages/RegisterPage'
-import type { Ad, CreateAdInput, User } from './types'
+import { adsApi } from './services/api'
+import type { Ad, CreateAdInput, LoginInput, RegisterInput } from './types'
 
 function AppLayout() {
   const navigate = useNavigate()
   const location = useLocation()
 
-  const [user, setUser] = useState<User | null>(null)
+  const { user, login, register, logout } = useAuth()
+  const { categories } = useCategories()
   const [selectedAd, setSelectedAd] = useState<Ad | null>(null)
+  // Incrementado a cada criação/exclusão de anúncio para forçar as listas
+  // (useAds/useMyAds) a revalidar, mesmo quando a rota não remonta —
+  // ex.: excluir pelo modal de detalhe sem sair da página da lista.
+  const [adsVersion, setAdsVersion] = useState(0)
 
   const goTo = (path: string) => navigate(path)
 
@@ -36,28 +44,29 @@ function AppLayout() {
   }, [])
 
   const handleCreateAd = async (input: CreateAdInput) => {
-    console.log('Novo anúncio (Simulação visual UI):', input)
-    alert('Anúncio publicado com sucesso (Visual UI)!')
+    await adsApi.create(input)
+    setAdsVersion((v) => v + 1)
     goTo('/anuncios')
   }
 
   const handleDeleteAd = async (id: string) => {
-    console.log('Deletar anúncio:', id)
-    alert('Anúncio excluído com sucesso (Visual UI)!')
+    await adsApi.remove(id)
+    setAdsVersion((v) => v + 1)
+    setSelectedAd(null)
   }
 
-  const handleLogin = async (data: { email: string }) => {
-    setUser({ id: 'u-1', name: data.email.split('@')[0] || 'Estudante', email: data.email })
-    goTo('/')
+  const handleLogin = async (data: LoginInput) => {
+    await login(data)
+    goTo('/meus-anuncios')
   }
 
-  const handleRegister = async (data: { name: string; email: string }) => {
-    setUser({ id: 'u-1', name: data.name, email: data.email })
+  const handleRegister = async (data: RegisterInput) => {
+    await register(data)
     goTo('/')
   }
 
   const handleLogout = () => {
-    setUser(null)
+    logout()
     goTo('/')
   }
 
@@ -74,19 +83,28 @@ function AppLayout() {
         <Routes>
           <Route
             path="/"
-            element={<LandingPage onNavigate={goTo} onSelectAd={(ad) => setSelectedAd(ad)} />}
+            element={
+              <LandingRoute onSelectAd={(ad) => setSelectedAd(ad)} onNavigate={goTo} />
+            }
           />
 
           <Route
             path="/anuncios"
-            element={<AdsPage onSelectAd={(ad) => setSelectedAd(ad)} onNavigate={goTo} />}
+            element={
+              <AdsListRoute
+                categories={categories}
+                refreshKey={adsVersion}
+                onSelectAd={(ad) => setSelectedAd(ad)}
+                onNavigate={goTo}
+              />
+            }
           />
 
           <Route
             path="/anuncios/novo"
             element={
               user ? (
-                <NewAdPage onSubmit={handleCreateAd} onNavigate={goTo} />
+                <NewAdPage categories={categories} onSubmit={handleCreateAd} onNavigate={goTo} />
               ) : (
                 <LoginPage onSubmit={handleLogin} onNavigate={goTo} />
               )
@@ -97,7 +115,11 @@ function AppLayout() {
             path="/meus-anuncios"
             element={
               user ? (
-                <MyAdsPage onDeleteAd={handleDeleteAd} onNavigate={goTo} onSelectAd={(ad) => setSelectedAd(ad)} />
+                <MyAdsRoute
+                  refreshKey={adsVersion}
+                  onSelectAd={(ad) => setSelectedAd(ad)}
+                  onNavigate={goTo}
+                />
               ) : (
                 <LoginPage onSubmit={handleLogin} onNavigate={goTo} />
               )
@@ -124,6 +146,64 @@ function AppLayout() {
         />
       )}
     </div>
+  )
+}
+
+interface LandingRouteProps {
+  onSelectAd: (ad: Ad) => void
+  onNavigate: (path: string) => void
+}
+
+function LandingRoute({ onSelectAd, onNavigate }: LandingRouteProps) {
+  const { stats } = useStats()
+  const { ads } = useAds({ limit: 3 })
+
+  return <LandingPage stats={stats} ads={ads} onSelectAd={onSelectAd} onNavigate={onNavigate} />
+}
+
+interface AdsListRouteProps {
+  categories: ReturnType<typeof useCategories>['categories']
+  refreshKey: number
+  onSelectAd: (ad: Ad) => void
+  onNavigate: (path: string) => void
+}
+
+function AdsListRoute({ categories, refreshKey, onSelectAd, onNavigate }: AdsListRouteProps) {
+  const [filters, setFilters] = useState<Parameters<typeof useAds>[0]>({})
+  const { ads, meta, loading } = useAds(filters, refreshKey)
+
+  return (
+    <AdsPage
+      ads={ads}
+      meta={meta ?? undefined}
+      categories={categories}
+      loading={loading}
+      initialFilters={filters}
+      onFilterChange={(partial) => setFilters((prev) => ({ ...prev, ...partial }))}
+      onPageChange={(page) => setFilters((prev) => ({ ...prev, page }))}
+      onSelectAd={onSelectAd}
+      onNavigate={onNavigate}
+    />
+  )
+}
+
+interface MyAdsRouteProps {
+  refreshKey: number
+  onSelectAd: (ad: Ad) => void
+  onNavigate: (path: string) => void
+}
+
+function MyAdsRoute({ refreshKey, onSelectAd, onNavigate }: MyAdsRouteProps) {
+  const { ads, loading, removeAd } = useMyAds(refreshKey)
+
+  return (
+    <MyAdsPage
+      ads={ads}
+      loading={loading}
+      onDeleteAd={removeAd}
+      onSelectAd={onSelectAd}
+      onNavigate={onNavigate}
+    />
   )
 }
 

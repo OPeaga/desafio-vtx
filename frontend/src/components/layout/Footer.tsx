@@ -10,7 +10,7 @@ export function Footer() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                 </svg>
               </div>
-              Vortex Marketplace
+              Desapega <span className="text-primary font-normal">UNIFOR</span>
             </div>
             <p className="mt-2.5 max-w-sm text-xs text-text-muted leading-relaxed">
               Plataforma de economia circular universitária. Conectando alunos para venda e doação de livros, materiais acadêmicos, calculadoras, jalecos e móveis dentro da UNIFOR.
@@ -39,7 +39,7 @@ export function Footer() {
         </div>
 
         <div className="mt-6 border-t border-border pt-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px]">
-          <p>© {new Date().getFullYear()} Vortex Marketplace. Todos os direitos reservados.</p>
+          <p>© {new Date().getFullYear()} Desapega UNIFOR. Todos os direitos reservados.</p>
           <p className="text-text-muted">Economia Circular no Campus</p>
         </div>
       </div>

@@ -34,7 +34,7 @@ export function Header({ user, onLogout, currentPath = '/', onNavigate }: Header
             </svg>
           </div>
           <span>
-            Vortex <span className="text-primary font-normal">Desapego</span>
+            Desapega <span className="text-primary font-normal">UNIFOR</span>
           </span>
         </a>
 

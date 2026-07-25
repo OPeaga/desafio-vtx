@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Badge } from "../components/ui/Badge";
 import { Button } from "../components/ui/Button";

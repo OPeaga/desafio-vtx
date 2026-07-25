@@ -48,7 +48,7 @@ export function LoginPage({ onSubmit, onNavigate }: LoginPageProps) {
             <path strokeLinecap="round" strokeLinejoin="round" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
           </svg>
         </div>
-        <h1 className="font-display text-2xl font-bold text-text">Entrar no Vortex Marketplace</h1>
+        <h1 className="font-display text-2xl font-bold text-text">Entrar no Desapega UNIFOR</h1>
         <p className="mt-1 text-sm text-text-muted">Acesse com sua conta para gerenciar anúncios e publicar itens</p>
       </div>
 
