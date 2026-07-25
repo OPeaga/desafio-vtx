@@ -125,30 +125,7 @@ Deploy previsto para 27/07 (ainda não realizado). Backend, frontend e PWA estã
 
 ## Diário de Bordo da IA
 
-### Ferramentas utilizadas
-1. `Claude Code e Claude Web`
-2. `Antigravity IDE - Gemini`
-
-### Estratégia de Engenharia de Prompts
-
-Exemplos reais de prompts utilizados durante o desenvolvimento:
-
-1. `como que ele valida que está correto? explique com exemplo`
-2. `Leia o arquivo PDF, vamos listar os pontos chaves e pontuar o que será feito. Tudo, inclusive os desafios bonus devem ser realizados. `
-3. `Isso aí, você será repsponsável por criar as páginas e bater o martelo na estilização final. Comece revisando o que já está feito, em seguida, faremos as telas, e por último, iremos implementar essa paleta de cores: em frontend\public\site-palette.svg `
-
-### Compartilhamento de histórico (opcional)
-`<link de conversa longa de desenvolvimento, se aplicável>`
-
-### Reflexão crítica
-
-Durante a criação do `config/env.ts`, o Claude Code adicionou validação das variáveis de ambiente com Zod — algo que não estava no levantamento de requisitos do edital, que restringe o uso do Zod à validação do `body` das requisições da API. Foi um caso de over-engineering: a IA generalizou um padrão (validação com Zod) para um contexto onde ele não havia sido pedido.
-
-O erro foi identificado na revisão do escopo e corrigido com o seguinte prompt:
-
-> Não era necessário validar as envs com zod, remova essa validação, vamos nos restringir somente às requisições como mostra no levantamento de requisitos.
-
-A IA reverteu o arquivo para uma checagem simples (`if (!process.env.X) throw new Error(...)`), mantendo o Zod apenas nos schemas de validação de requisição (`auth.schema.ts`, `listings.schema.ts`), como definido no escopo do projeto.
+Ver [`DIARIO_DE_BORDO.txt`](./DIARIO_DE_BORDO.txt) na raiz do projeto.
 
 ---
 
