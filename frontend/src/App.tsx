@@ -33,15 +33,8 @@ function AppLayout() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }, [location.pathname])
 
-  // Register PWA Service Worker
-  useEffect(() => {
-    if ('serviceWorker' in navigator && import.meta.env.PROD) {
-      navigator.serviceWorker
-        .register('/sw.js')
-        .then((reg) => console.log('Service Worker registrado:', reg.scope))
-        .catch((err) => console.error('Erro ao registrar Service Worker:', err))
-    }
-  }, [])
+  // O registro do Service Worker é injetado automaticamente pelo
+  // vite-plugin-pwa (registerType: 'autoUpdate') — sem código manual aqui.
 
   const handleCreateAd = async (input: CreateAdInput) => {
     await adsApi.create(input)
