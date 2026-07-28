@@ -6,7 +6,7 @@
   "main": "dist/server.js",
   "scripts": {
     "dev": "nodemon",
-    "build": "prisma generate && tsc",
+    "build": "prisma generate && npm run db:seed && tsc ",
     "start": "node dist/server.js",
     "db:seed": "prisma db seed"
   },
