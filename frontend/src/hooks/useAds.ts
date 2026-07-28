@@ -70,6 +70,35 @@ export function useMyAds(refreshKey: number = 0) {
   return { ads, loading, error, removeAd }
 }
 
+export function useAdById(id: string) {
+  const [ad, setAd] = useState<Ad | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (!id) return
+    const controller = new AbortController()
+
+    setLoading(true)
+    setError(null)
+
+    adsApi
+      .getById(id, controller.signal)
+      .then(setAd)
+      .catch((err: unknown) => {
+        if (controller.signal.aborted) return
+        setError(err instanceof Error ? err.message : 'Anúncio não encontrado.')
+      })
+      .finally(() => {
+        if (!controller.signal.aborted) setLoading(false)
+      })
+
+    return () => controller.abort()
+  }, [id])
+
+  return { ad, loading, error }
+}
+
 export function useCategories() {
   const [categories, setCategories] = useState<Category[]>([])
   const [loading, setLoading] = useState(true)

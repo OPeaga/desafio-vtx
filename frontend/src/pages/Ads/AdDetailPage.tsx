@@ -1,23 +1,25 @@
 import { useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import { Badge } from '../../components/ui/Badge'
 import { Button } from '../../components/ui/Button'
 import { Card } from '../../components/ui/Card'
-import type { Ad } from '../../types'
+import { Spinner } from '../../components/ui/Spinner'
+import { useAdById } from '../../hooks/useAds'
+import { useAuth } from '../../hooks/useAuth'
+import { adsApi } from '../../services/api'
 
-interface AdDetailPageProps {
-  ad: Ad | null
-  onClose?: () => void
-  onDelete?: (id: string) => void
-  currentUserId?: string
-}
+export function AdDetailPage() {
+  const { id = '' } = useParams<{ id: string }>()
+  const navigate = useNavigate()
+  const { user } = useAuth()
 
-export function AdDetailPage({ ad, onClose, onDelete, currentUserId }: AdDetailPageProps) {
+  const { ad, loading, error } = useAdById(id)
+
   const [copied, setCopied] = useState(false)
   const [interestSent, setInterestSent] = useState(false)
+  const [deleting, setDeleting] = useState(false)
 
-  if (!ad) return null
-
-  const isOwner = currentUserId && ad.user && currentUserId === ad.user.id
+  const isOwner = user && ad?.user && user.id === ad.user.id
 
   const formatPrice = (price: number | null, type: string) => {
     if (type === 'doacao' || price === null) {
@@ -36,38 +38,78 @@ export function AdDetailPage({ ad, onClose, onDelete, currentUserId }: AdDetailP
     setTimeout(() => setCopied(false), 2500)
   }
 
-  const handleDemonstrateInterest = () => {
-    setInterestSent(true)
+  const handleDelete = async () => {
+    if (!ad) return
+    if (!confirm('Tem certeza que deseja excluir este anúncio? Esta ação é irreversível.')) return
+    setDeleting(true)
+    try {
+      await adsApi.remove(ad.id)
+      navigate('/anuncios', { replace: true })
+    } finally {
+      setDeleting(false)
+    }
   }
 
-  return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/60 p-4 backdrop-blur-sm cursor-pointer"
-      onClick={(e) => {
-        if (e.target === e.currentTarget) {
-          onClose?.()
-        }
-      }}
-    >
-      <div
-        className="relative w-full max-w-3xl overflow-hidden rounded-2xl border border-border bg-surface shadow-2xl animate-in fade-in zoom-in duration-200 cursor-default"
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* Close Button */}
-        <button
-          type="button"
-          onClick={onClose}
-          className="absolute top-4 right-4 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-surface-raised/80 text-text-muted hover:bg-surface-raised hover:text-text backdrop-blur-md transition-colors cursor-pointer"
-          aria-label="Fechar modal"
-        >
-          <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
+  // ── Estados de carregamento e erro ──────────────────────────────────────────
 
-        <div className="max-h-[90vh] overflow-y-auto p-6 sm:p-8">
+  if (loading) {
+    return (
+      <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6">
+        <div className="flex flex-col items-center justify-center gap-4 text-text-muted">
+          <Spinner size="lg" />
+          <p className="text-sm">Carregando anúncio…</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (error || !ad) {
+    return (
+      <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6 text-center">
+        <svg
+          className="mx-auto h-16 w-16 text-text-muted opacity-40"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={1.5}
+            d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
+        </svg>
+        <h1 className="mt-4 font-display text-2xl font-bold text-text">Anúncio não encontrado</h1>
+        <p className="mt-2 text-sm text-text-muted">
+          {error ?? 'Este anúncio pode ter sido removido ou o link está incorreto.'}
+        </p>
+        <Button variant="secondary" className="mt-6" onClick={() => navigate('/anuncios')}>
+          ← Voltar para anúncios
+        </Button>
+      </div>
+    )
+  }
+
+  // ── Página de detalhe ────────────────────────────────────────────────────────
+
+  return (
+    <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6 lg:px-8">
+      {/* Breadcrumb / Voltar */}
+      <button
+        type="button"
+        onClick={() => navigate(-1)}
+        className="mb-6 flex items-center gap-1.5 text-sm text-text-muted hover:text-text transition-colors cursor-pointer"
+      >
+        <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+        </svg>
+        Voltar
+      </button>
+
+      <div className="overflow-hidden rounded-2xl border border-border bg-surface shadow-sm">
+        <div className="p-6 sm:p-8">
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-            {/* Image Section */}
+            {/* Imagem */}
             <div className="flex flex-col gap-3">
               <div className="relative aspect-square w-full overflow-hidden rounded-xl bg-surface-raised border border-border">
                 {ad.imageUrl ? (
@@ -75,7 +117,12 @@ export function AdDetailPage({ ad, onClose, onDelete, currentUserId }: AdDetailP
                 ) : (
                   <div className="flex h-full w-full flex-col items-center justify-center bg-primary-light/40 text-brand p-6 text-center">
                     <svg className="h-16 w-16 opacity-40 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={1.5}
+                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                      />
                     </svg>
                     <span className="text-xs text-text-muted">Sem imagem enviada pelo anunciante</span>
                   </div>
@@ -83,7 +130,7 @@ export function AdDetailPage({ ad, onClose, onDelete, currentUserId }: AdDetailP
               </div>
             </div>
 
-            {/* Content Section */}
+            {/* Conteúdo */}
             <div className="flex flex-col justify-between space-y-6">
               <div>
                 <div className="flex items-center gap-2 mb-2">
@@ -93,16 +140,18 @@ export function AdDetailPage({ ad, onClose, onDelete, currentUserId }: AdDetailP
                   <Badge variant="category">{ad.category.name}</Badge>
                 </div>
 
-                <h2 className="font-display text-2xl font-bold text-text">{ad.title}</h2>
+                <h1 className="font-display text-2xl font-bold text-text">{ad.title}</h1>
 
                 <div className="mt-4">{formatPrice(ad.price, ad.type)}</div>
 
                 <div className="mt-6 border-t border-border pt-4">
-                  <h3 className="text-xs font-semibold uppercase tracking-wider text-text-muted">Descrição do Item</h3>
+                  <h2 className="text-xs font-semibold uppercase tracking-wider text-text-muted">
+                    Descrição do Item
+                  </h2>
                   <p className="mt-2 text-sm text-text whitespace-pre-line leading-relaxed">{ad.description}</p>
                 </div>
 
-                {/* Advertiser Card */}
+                {/* Card do anunciante */}
                 <Card padding="sm" className="mt-6 bg-surface-raised/60">
                   <div className="flex items-center gap-3">
                     <div className="flex h-10 w-10 items-center justify-center rounded-full bg-brand text-sm font-bold text-white">
@@ -116,7 +165,7 @@ export function AdDetailPage({ ad, onClose, onDelete, currentUserId }: AdDetailP
                 </Card>
               </div>
 
-              {/* Actions */}
+              {/* Ações */}
               <div className="space-y-3 border-t border-border pt-4">
                 {interestSent ? (
                   <div className="rounded-lg bg-success-bg p-4 text-center text-sm font-medium text-success border border-success/30">
@@ -128,7 +177,7 @@ export function AdDetailPage({ ad, onClose, onDelete, currentUserId }: AdDetailP
                     fullWidth
                     size="md"
                     className="py-3 text-base shadow-sm cursor-pointer"
-                    onClick={handleDemonstrateInterest}
+                    onClick={() => setInterestSent(true)}
                   >
                     Tenho Interesse / Entrar em Contato
                   </Button>
@@ -136,7 +185,7 @@ export function AdDetailPage({ ad, onClose, onDelete, currentUserId }: AdDetailP
 
                 <div className="flex items-center gap-2">
                   <Button variant="secondary" size="sm" className="flex-1 cursor-pointer" onClick={handleCopyLink}>
-                    {copied ? 'Link Copiado!' : 'Compartilhar'}
+                    {copied ? '✓ Link Copiado!' : 'Compartilhar'}
                   </Button>
 
                   {isOwner && (
@@ -144,14 +193,10 @@ export function AdDetailPage({ ad, onClose, onDelete, currentUserId }: AdDetailP
                       variant="danger"
                       size="sm"
                       className="cursor-pointer"
-                      onClick={() => {
-                        if (confirm('Tem certeza que deseja excluir este anúncio?')) {
-                          onDelete?.(ad.id)
-                          onClose?.()
-                        }
-                      }}
+                      disabled={deleting}
+                      onClick={handleDelete}
                     >
-                      Excluir Anúncio
+                      {deleting ? <Spinner size="sm" /> : 'Excluir Anúncio'}
                     </Button>
                   )}
                 </div>

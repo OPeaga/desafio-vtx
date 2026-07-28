@@ -16,7 +16,6 @@ interface AdsPageProps {
   initialFilters?: AdFilters;
   onFilterChange?: (filters: Partial<AdFilters>) => void;
   onPageChange?: (page: number) => void;
-  onSelectAd?: (ad: Ad) => void;
   onNavigate?: (path: string) => void;
 }
 
@@ -92,7 +91,6 @@ export function AdsPage({
   initialFilters = {},
   onFilterChange,
   onPageChange,
-  onSelectAd,
   onNavigate,
 }: AdsPageProps) {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -336,7 +334,7 @@ export function AdsPage({
                     key={ad.id}
                     padding="sm"
                     className="group flex flex-col justify-between overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:shadow-md cursor-pointer"
-                    onClick={() => onSelectAd?.(ad)}
+                    onClick={() => onNavigate?.(`/anuncios/${ad.id}`)}
                   >
                     <div className="relative aspect-video w-full overflow-hidden rounded-lg bg-surface">
                       {ad.imageUrl ? (
