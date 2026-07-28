@@ -118,7 +118,7 @@ Frontend disponível em `http://localhost:5173`.
 
 Deploy previsto para 27/07 (ainda não realizado). Backend, frontend e PWA estão completos e rodando localmente; falta apenas publicar.
 
-- API: `<preencher após deploy>`
+- API: `https://backend-production-6dcdb.up.railway.app/`
 - Frontend: `<preencher após deploy>`
 
 ---
