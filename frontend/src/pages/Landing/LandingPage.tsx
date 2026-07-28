@@ -17,7 +17,6 @@ interface LandingPageProps {
   stats?: Stats | null;
   ads?: Ad[];
   onNavigate?: (path: string) => void;
-  onSelectAd?: (ad: Ad) => void;
 }
 
 
@@ -25,7 +24,6 @@ export function LandingPage({
   stats,
   ads = [],
   onNavigate,
-  onSelectAd,
 }: LandingPageProps) {
   const displayAds = ads.slice(0, 3);
 
@@ -213,7 +211,7 @@ export function LandingPage({
               key={ad.id}
               padding="sm"
               className="group flex flex-col justify-between overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:shadow-md cursor-pointer"
-              onClick={() => onSelectAd?.(ad)}
+              onClick={() => onNavigate?.(`/anuncios/${ad.id}`)}
             >
               {/* Image Preview */}
               <div className="relative aspect-video w-full overflow-hidden rounded-lg bg-surface">

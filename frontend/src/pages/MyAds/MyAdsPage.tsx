@@ -10,7 +10,6 @@ interface MyAdsPageProps {
   loading?: boolean
   onDeleteAd?: (id: string) => Promise<void> | void
   onNavigate?: (path: string) => void
-  onSelectAd?: (ad: Ad) => void
 }
 
 const MOCK_MY_ADS: Ad[] = [
@@ -32,7 +31,6 @@ export function MyAdsPage({
   loading = false,
   onDeleteAd,
   onNavigate,
-  onSelectAd,
 }: MyAdsPageProps) {
   const [deletingId, setDeletingId] = useState<string | null>(null)
 
@@ -100,7 +98,7 @@ export function MyAdsPage({
             >
               <div
                 className="cursor-pointer"
-                onClick={() => onSelectAd?.(ad)}
+                onClick={() => onNavigate?.(`/anuncios/${ad.id}`)}
               >
                 <div className="relative aspect-video w-full overflow-hidden rounded-lg bg-surface">
                   {ad.imageUrl ? (
