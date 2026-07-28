@@ -1,6 +1,6 @@
-# CLAUDE.md
+# AGENTS.md
 
-Contexto do projeto para o Claude Code. Leia isto antes de gerar ou alterar qualquer código.
+Contexto do projeto para o Codex. Leia isto antes de gerar ou alterar qualquer código.
 
 ## O que é o projeto
 
@@ -133,4 +133,4 @@ Deleção é **hard delete** (remove de verdade do banco), não soft delete. Ver
 
 ## Diário de Bordo da IA
 
-O usuário deve preencher manualmente a seção "Diário de Bordo da IA" no README.md com prompts reais usados, ferramentas, e uma reflexão crítica sobre algum erro da IA. Não gerar conteúdo fictício para essa seção — é avaliado como prova de autoria. O conteúdo mora direto no README.md (não em arquivo separado — decisão de usar `DIARIO_DE_BORDO.txt` à parte foi revertida em 2026-07-27).
+O usuário deve preencher manualmente no README.md a seção "Diário de Bordo da IA" com prompts reais usados, ferramentas, e uma reflexão crítica sobre algum erro da IA. Não gerar conteúdo fictício para essa seção — é avaliado como prova de autoria.
