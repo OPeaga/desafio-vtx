@@ -138,7 +138,7 @@ Exemplos reais de prompts utilizados durante o desenvolvimento:
 3. `Isso aí, você será repsponsável por criar as páginas e bater o martelo na estilização final. Comece revisando o que já está feito, em seguida, faremos as telas, e por último, iremos implementar essa paleta de cores: em frontend\public\site-palette.svg `
 
 ### Compartilhamento de histórico (opcional)
-`<link de conversa longa de desenvolvimento, se aplicável>`
+`https://claude.ai/share/df08ac94-a70e-4b69-9ab0-c7fb8a1fc982`
 
 ### Reflexão crítica
 
