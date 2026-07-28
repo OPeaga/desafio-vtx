@@ -11,7 +11,8 @@ import { LoginPage } from './pages/Login/LoginPage'
 import { MyAdsPage } from './pages/MyAds/MyAdsPage'
 import { NewAdPage } from './pages/NewAd/NewAdPage'
 import { RegisterPage } from './pages/Register/RegisterPage'
-import type { Ad, CreateAdInput, LoginInput, RegisterInput } from './types'
+import { adsApi } from './services/api'
+import type { CreateAdInput, LoginInput, RegisterInput } from './types'
 
 function AppLayout() {
   const navigate = useNavigate()
