@@ -1,29 +1,7 @@
-import { Badge } from "../components/ui/Badge";
-import { Button } from "../components/ui/Button";
-import { Card } from "../components/ui/Card";
-import type { Ad, Stats } from "../types";
-
-interface LandingPageProps {
-  stats?: Stats | null;
-  ads?: Ad[];
-  onNavigate?: (path: string) => void;
-  onSelectAd?: (ad: Ad) => void;
-}
-
-const DEFAULT_STATS: Stats = {
-  totalAds: 48,
-  totalUsers: 124,
-  totalDoacoes: 18,
-  totalVendas: 30,
-  adsByCategory: [
-    { name: "Livros", slug: "livros", total: 18 },
-    { name: "Engenharia", slug: "engenharia", total: 12 },
-    { name: "Computação", slug: "computacao", total: 10 },
-    { name: "Química", slug: "quimica", total: 4 },
-    { name: "Móveis", slug: "moveis", total: 2 },
-    { name: "Outros", slug: "outros", total: 2 },
-  ],
-};
+import { Badge } from "../../components/ui/Badge";
+import { Button } from "../../components/ui/Button";
+import { Card } from "../../components/ui/Card";
+import type { Ad, CategoryStat, Stats } from "../../types";
 
 const CATEGORY_DESCRIPTIONS: Record<string, string> = {
   livros: "Livros didáticos, apostilas e literatura acadêmica recomendada.",
@@ -35,57 +13,21 @@ const CATEGORY_DESCRIPTIONS: Record<string, string> = {
   outros: "Materiais diversos de apoio aos cursos da universidade.",
 };
 
-const MOCK_FEATURED_ADS: Ad[] = [
-  {
-    id: "1",
-    title: "Cálculo James Stewart Vol. 1 (8ª Edição)",
-    description:
-      "Livro em ótimo estado com poucos grifos a lápis. Essencial para disciplinas de Cálculo I e II.",
-    type: "venda",
-    price: 45.0,
-    imageUrl:
-      "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=600&q=80",
-    createdAt: new Date().toISOString(),
-    category: { id: 1, name: "Livros", slug: "livros" },
-    user: { id: "u1", name: "Lucas Silva" },
-  },
-  {
-    id: "2",
-    title: "Calculadora Científica Casio fx-82MS",
-    description:
-      "Funcionando perfeitamente com tampa de proteção original. Ideal para engenharias.",
-    type: "doacao",
-    price: null,
-    imageUrl:
-      "https://images.unsplash.com/photo-1594980596870-8aa52a78d8cd?auto=format&fit=crop&w=600&q=80",
-    createdAt: new Date().toISOString(),
-    category: { id: 2, name: "Engenharia", slug: "engenharia" },
-    user: { id: "u2", name: "Mariana Oliveira" },
-  },
-  {
-    id: "3",
-    title: "Jaleco Branco Algodão M (Manga Longa)",
-    description:
-      "Jaleco usado por 1 semestre em laboratório de Química. Sem manchas, higienizado.",
-    type: "venda",
-    price: 35.0,
-    imageUrl:
-      "https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?auto=format&fit=crop&w=600&q=80",
-    createdAt: new Date().toISOString(),
-    category: { id: 4, name: "Química", slug: "quimica" },
-    user: { id: "u3", name: "Beatriz Costa" },
-  },
-];
+interface LandingPageProps {
+  stats?: Stats | null;
+  ads?: Ad[];
+  onNavigate?: (path: string) => void;
+  onSelectAd?: (ad: Ad) => void;
+}
+
 
 export function LandingPage({
-  stats = DEFAULT_STATS,
-  ads = MOCK_FEATURED_ADS,
+  stats,
+  ads = [],
   onNavigate,
   onSelectAd,
 }: LandingPageProps) {
-  const currentStats = stats || DEFAULT_STATS;
-  const displayAds =
-    ads && ads.length > 0 ? ads.slice(0, 3) : MOCK_FEATURED_ADS;
+  const displayAds = ads.slice(0, 3);
 
   const formatPrice = (price: number | null, type: string) => {
     if (type === "doacao" || price === null) {
@@ -155,7 +97,7 @@ export function LandingPage({
           <div className="mt-10 grid grid-cols-2 gap-4 rounded-xl border border-white/10 bg-white/5 p-4 backdrop-blur-md sm:grid-cols-4 sm:p-5">
             <div className="text-center">
               <p className="font-display text-2xl font-bold text-white sm:text-3xl">
-                {currentStats.totalAds}
+                {stats?.totalAds ?? 0}
               </p>
               <p className="text-xs font-medium text-slate-300">
                 Anúncios Ativos
@@ -163,13 +105,13 @@ export function LandingPage({
             </div>
             <div className="text-center">
               <p className="font-display text-2xl font-bold text-emerald-300 sm:text-3xl">
-                {currentStats.totalDoacoes}
+                {stats?.totalDoacoes ?? 0}
               </p>
               <p className="text-xs font-medium text-slate-300">Itens Doados</p>
             </div>
             <div className="text-center">
               <p className="font-display text-2xl font-bold text-primary-light sm:text-3xl">
-                {currentStats.totalVendas}
+                {stats?.totalVendas ?? 0}
               </p>
               <p className="text-xs font-medium text-slate-300">
                 Vendas no Campus
@@ -177,7 +119,7 @@ export function LandingPage({
             </div>
             <div className="text-center">
               <p className="font-display text-2xl font-bold text-white sm:text-3xl">
-                {currentStats.totalUsers}
+                {stats?.totalUsers ?? 0}
               </p>
               <p className="text-xs font-medium text-slate-300">
                 Estudantes Conectados
@@ -202,7 +144,7 @@ export function LandingPage({
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {currentStats.adsByCategory.map((cat) => (
+          {(stats?.adsByCategory ?? []).map((cat: CategoryStat) => (
             <Card
               key={cat.slug}
               padding="md"

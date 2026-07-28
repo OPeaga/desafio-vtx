@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import { Badge } from '../components/ui/Badge'
-import { Button } from '../components/ui/Button'
-import { Card } from '../components/ui/Card'
-import { Spinner } from '../components/ui/Spinner'
-import type { Ad } from '../types'
+import { Badge } from '../../components/ui/Badge'
+import { Button } from '../../components/ui/Button'
+import { Card } from '../../components/ui/Card'
+import { Spinner } from '../../components/ui/Spinner'
+import type { Ad } from '../../types'
 
 interface MyAdsPageProps {
   ads?: Ad[]

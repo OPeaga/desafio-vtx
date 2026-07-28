@@ -1,8 +1,8 @@
 import { useState } from 'react'
-import { Badge } from '../components/ui/Badge'
-import { Button } from '../components/ui/Button'
-import { Card } from '../components/ui/Card'
-import type { Ad } from '../types'
+import { Badge } from '../../components/ui/Badge'
+import { Button } from '../../components/ui/Button'
+import { Card } from '../../components/ui/Card'
+import type { Ad } from '../../types'
 
 interface AdDetailPageProps {
   ad: Ad | null

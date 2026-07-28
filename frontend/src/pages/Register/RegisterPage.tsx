@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import { Button } from '../components/ui/Button'
-import { Card } from '../components/ui/Card'
-import { Input } from '../components/ui/Input'
-import { Spinner } from '../components/ui/Spinner'
-import type { RegisterInput } from '../types'
+import { Button } from '../../components/ui/Button'
+import { Card } from '../../components/ui/Card'
+import { Input } from '../../components/ui/Input'
+import { Spinner } from '../../components/ui/Spinner'
+import type { RegisterInput } from '../../types'
 
 interface RegisterPageProps {
   onSubmit?: (data: RegisterInput) => Promise<void>

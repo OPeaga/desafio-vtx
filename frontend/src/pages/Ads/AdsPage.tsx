@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { Badge } from "../components/ui/Badge";
-import { Button } from "../components/ui/Button";
-import { Card } from "../components/ui/Card";
-import { Input } from "../components/ui/Input";
-import { Select } from "../components/ui/Select";
-import { Spinner } from "../components/ui/Spinner";
-import type { Ad, AdFilters, AdType, Category, PaginationMeta } from "../types";
+import { Badge } from "../../components/ui/Badge";
+import { Button } from "../../components/ui/Button";
+import { Card } from "../../components/ui/Card";
+import { Input } from "../../components/ui/Input";
+import { Select } from "../../components/ui/Select";
+import { Spinner } from "../../components/ui/Spinner";
+import type { Ad, AdFilters, AdType, Category, PaginationMeta } from "../../types";
 
 interface AdsPageProps {
   ads?: Ad[];

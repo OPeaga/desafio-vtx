@@ -1,10 +1,10 @@
 import { useState } from 'react'
-import { Button } from '../components/ui/Button'
-import { Card } from '../components/ui/Card'
-import { Input } from '../components/ui/Input'
-import { Select } from '../components/ui/Select'
-import { Spinner } from '../components/ui/Spinner'
-import type { AdType, Category, CreateAdInput } from '../types'
+import { Button } from '../../components/ui/Button'
+import { Card } from '../../components/ui/Card'
+import { Input } from '../../components/ui/Input'
+import { Select } from '../../components/ui/Select'
+import { Spinner } from '../../components/ui/Spinner'
+import type { AdType, Category, CreateAdInput } from '../../types'
 
 interface NewAdPageProps {
   categories?: Category[]
