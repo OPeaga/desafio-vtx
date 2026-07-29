@@ -4,7 +4,7 @@ import { Badge } from '../../components/ui/Badge'
 import { Button } from '../../components/ui/Button'
 import { Card } from '../../components/ui/Card'
 import { Spinner } from '../../components/ui/Spinner'
-import { useAdById } from '../../hooks/useAds'
+import { useAdById } from '../../hooks/useAdById'
 import { useAuth } from '../../hooks/useAuth'
 import { adsApi } from '../../services/api'
 
